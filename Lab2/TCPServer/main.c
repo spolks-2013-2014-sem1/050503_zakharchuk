@@ -55,15 +55,9 @@ int main(int argc, char *argv[])
      if (n < 0)
          error("ERROR reading from socket");
 
-     if(sizeof(buffer) == 1 && buffer[0] == 'q')
-     {
-         close(newsockfd);
-         break;
-     }
-
      printf("Here is the message: %s\n",buffer);
 
-     n = write(newsockfd,"I got your message\n",19);
+     n = write(newsockfd,"Server has got your message\n",28);
      if (n < 0)
          error("ERROR writing to socket");
 
