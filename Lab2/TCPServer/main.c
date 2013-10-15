@@ -17,7 +17,7 @@ void error(const char *msg)
 
 int main(int argc, char *argv[])
 {
-     int sockfd, newsockfd, portno;
+     int listenfd, connfd, portno;
      socklen_t clilen;
      char buffer[256];
      struct sockaddr_in serv_addr, cli_addr;
@@ -29,40 +29,55 @@ int main(int argc, char *argv[])
          exit(1);
      }
 
-     sockfd = socket(AF_INET, SOCK_STREAM, 0);
-     if (sockfd < 0)
+     listenfd = socket(AF_INET, SOCK_STREAM, 0);
+     if (listenfd < 0)
         error("ERROR opening socket");
 
      bzero((char *) &serv_addr, sizeof(serv_addr));
      portno = atoi(argv[1]);
-     serv_addr.sin_family = AF_INET;
-     serv_addr.sin_addr.s_addr = INADDR_ANY;
-     serv_addr.sin_port = htons(portno);
+     serv_addr.sin_family = AF_INET;            // a code for the address family
+     serv_addr.sin_addr.s_addr = INADDR_ANY;    // IP address of the host
+     serv_addr.sin_port = htons(portno);        // converts a port number in host byte order
+                                                // to a port number in network byte order
 
-     if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
+     if (bind(listenfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
         error("ERROR on binding");
 
-     listen(sockfd,5);
+     listen(listenfd,5);
      clilen = sizeof(cli_addr);
 
-     newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
+     char key = 'o';
+     while(key != 'q')
+     {
+         connfd = accept(listenfd, (struct sockaddr *) &cli_addr, &clilen);
+         if (connfd < 0)
+              error("ERROR on accept");
 
-     if (newsockfd < 0)
-          error("ERROR on accept");
+         while(1)
+         {
+             bzero(buffer,256);
+             n = read(connfd,buffer,255);
+             if (n < 0)
+                 error("ERROR reading from socket");
 
-     bzero(buffer,256);
-     n = read(newsockfd,buffer,255);
-     if (n < 0)
-         error("ERROR reading from socket");
+             if(strlen(buffer) == 2 && buffer[0] == 'q')
+             {
+                 key = buffer[0];
+                 break;
+             }
+             printf("Here is the message:\n%s\n",buffer);
 
-     printf("Here is the message: %s\n",buffer);
+             char echo[256] = "Server has got your message:\n";
+             strncat(echo, buffer, strlen(echo)+strlen(buffer));
+             n = write(connfd, echo, sizeof(echo));
+             if (n < 0)
+                 error("ERROR writing to socket");
+         }
 
-     n = write(newsockfd,"Server has got your message\n",28);
-     if (n < 0)
-         error("ERROR writing to socket");
+         close(connfd);
+     }
 
-     close(newsockfd);
-     close(sockfd);
+     close(listenfd);
 
      return 0;
 }
