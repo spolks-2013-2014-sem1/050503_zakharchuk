@@ -1,0 +1,11 @@
+Lab 3.
+
+Create client and serial server, that allows you to transfer a file using TCP. Pay attention to exception handling, such as physical or program disconnection.
+
+Usage:
+
+Server: ./main <hostname> <port>
+Example, ./main 127.0.0.1 3000
+
+Client: ./main <hostname <port> <filePath>
+Example, ./main 127.0.0.1 3000 /home/user/temp_file
