@@ -51,11 +51,6 @@ int main(int argc, char *argv[])
     argc == 4 ? sendFileTCP(argv[1], atoi(argv[2]), argv[3]) :
                 sendFileUDP(argv[1], atoi(argv[2]), argv[3]);
 
-    /*if (argc == 4)
-        sendFileTCP(argv[1], atoi(argv[2]), argv[3]);
-    else
-        sendFileUDP(argv[1], atoi(argv[2]), argv[3]);*/
-
     return 0;
 }
 void sendFileTCP(char *serverName, unsigned int serverPort, char *filePath)
