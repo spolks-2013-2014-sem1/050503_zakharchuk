@@ -29,7 +29,8 @@ int createTcpSocket(char *hostName, unsigned short port, struct sockaddr_in *sin
     }
     // Create socket
     int socketDescriptor = socket(PF_INET, SOCK_STREAM, pptr->p_proto);
-    if (socketDescriptor < 0) {
+    if (socketDescriptor < 0)
+    {
         perror("Create socket error");
         return -1;
     }
@@ -41,26 +42,25 @@ int createTcpServerSocket(char *hostName, unsigned short port, struct sockaddr_i
     int socketDescriptor;
 
     // Create socket
-    if ((socketDescriptor =
-         createTcpSocket(hostName, port,
-                         (struct sockaddr_in *) sin)) == -1) {
+    if ((socketDescriptor = createTcpSocket(hostName, port, (struct sockaddr_in *) sin)) == -1)
         return -1;
-    }
+
     // allow server to bind to an address which is in a TIME_WAIT state
     int opt = 1;
-    if (setsockopt
-        (socketDescriptor, SOL_SOCKET, SO_REUSEADDR, &opt,
-         sizeof(int)) == -1) {
+    if (setsockopt(socketDescriptor, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(int)) == -1)
+    {
         perror("setsockopt");
         return -1;
     }
     // Bind socket
-    if (bind(socketDescriptor, (struct sockaddr *) sin, sizeof(*sin)) < 0) {
+    if (bind(socketDescriptor, (struct sockaddr *) sin, sizeof(*sin)) < 0)
+    {
         perror("Bind socket error");
         return -1;
     }
     // Switch socket into passive mode 
-    if (listen(socketDescriptor, qlen) == -1) {
+    if (listen(socketDescriptor, qlen) == -1)
+    {
         perror("Socket passive mode error");
         return -1;
     }

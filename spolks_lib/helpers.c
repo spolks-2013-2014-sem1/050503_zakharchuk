@@ -29,7 +29,7 @@ FILE* CreateReceiveFile(char *fileName, const char *folderName)
         time_t now;
         time(&now);
         strftime(time_buf, sizeof(time_buf), "_%Y-%m-%d_%H-%M-%S", localtime(&now));
-        
+
         strcat(filePath, time_buf);
     }
 
@@ -43,4 +43,8 @@ long GetFileSize(FILE * file)
     long fileSize = ftell(file);
     fseek(file, pos, SEEK_SET);
     return fileSize;
+}
+uint64_t IpPortToNumber(uint32_t IPv4, uint16_t port)
+{
+    return (((uint64_t) IPv4) << 16) | (uint64_t) port;
 }
