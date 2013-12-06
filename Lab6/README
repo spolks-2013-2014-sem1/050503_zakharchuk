@@ -1,0 +1,18 @@
+Lab 6.  Parallel query processing organization on the server using multiplexing.
+
+This lab is a modification of the previous lab.
+Modify the server to the parallel
+service for multiple clients by multiplexing (select, pselect, poll).
+
+Usage:
+
+1) ./server <hostname> <port> [-u]
+Example ./server 127.0.0.1 3000 -u
+The program listens for incoming connections.
+When the client is connected, server receives the file and saves it in the folder Received_files.
+[-u] - UDP usage (by default TCP)
+
+2) ./client <hostname> <port> <filePath> [-u]
+Example, ./client 127.0.0.1 3000 /home/user/tempFile -u
+The program connects to the server and then sends the file, which is situated on the path filePath.
+[-u] - UDP usage (by default TCP)
