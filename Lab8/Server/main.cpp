@@ -313,7 +313,8 @@ void UDP_Processing(unsigned char *buf, int recvSize, struct sockaddr_in &addr)
                 }
 
                 bytesTransmitted = sendto(UdpServerDescr, &ACK, sizeof(ACK), 0, (struct sockaddr *) &(addr), rlen);
-                if (bytesTransmitted < 0) {
+                if (bytesTransmitted < 0)
+                {
                     perror("send");
                     exit(EXIT_FAILURE);
                 }
