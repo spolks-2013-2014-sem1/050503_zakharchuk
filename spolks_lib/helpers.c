@@ -48,3 +48,28 @@ uint64_t IpPortToNumber(uint32_t IPv4, uint16_t port)
 {
     return (((uint64_t) IPv4) << 16) | (uint64_t) port;
 }
+// str is string like "fileName:fileSize\0"
+char *getFileSizePTR(char *str, int size)
+{
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        if (str[i] == ':')
+        {
+            str[i] = 0;
+            return &str[i + 1];
+        }
+    }
+    return NULL;
+}
+void SafePrint(pthread_mutex_t* mutex, const char* message, ...)
+{        
+    va_list args;
+    va_start(args, message);
+
+    pthread_mutex_lock(mutex);
+    vprintf(message, args);
+    pthread_mutex_unlock(mutex);
+
+    va_end(args);        
+}
